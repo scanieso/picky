@@ -1,17 +1,37 @@
 import React, { Component } from 'react';
 import Select from './Select';
 import './App.css';
+import PICKS from './utils/picks';
 
-const options = [
-  'Activity',
-  'Restaurant',
+const TYPE_OPTIONS = [
+  'To Do',
+  'To Eat',
   'Random'
 ];
 
 class App extends Component {
-  handleChange(e) {
-    const { value } = e.target;
-    this.setState({ category: value });
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedType: 'Random'
+    };
+  }
+
+  pick = (e) => {
+    const selectedType = e.target.value;
+    const random = Math.random();
+    let picks = PICKS;
+
+    if (selectedType !== 'Random') {
+      picks = PICKS.filter((pick) => {
+        return pick.type === selectedType;
+      });
+    }
+
+    const pick = picks[Math.floor(picks.length * random)];
+    this.setState({
+      pick: pick.name
+    });
   }
 
   render() {
@@ -21,14 +41,17 @@ class App extends Component {
           <div className="container">
             <h1>Picky</h1>
             <p>App to choose stuff</p>
+
+            <Select
+              options={TYPE_OPTIONS}
+              onChange={this.pick} />
           </div>
         </header>
 
         <main id="main">
           <div className="container">
-            <Select options={options} onChange={this.handleChange} />
-
-            <p>Selected: {this.category}</p>
+            <h2>{this.state.pick}</h2>
+            <button onClick={this.pick}>Try another?</button>
           </div>
         </main>
       </div>

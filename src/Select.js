@@ -12,7 +12,9 @@ class Select extends Component {
   render() {
     const optionElements = this.createOptionElements();
     return (
-      <select onChange={this.props.onChange}>
+      <select
+        name={this.props.name}
+        onChange={this.props.onChange}>
         <option value="">Choose one</option>
         {optionElements}
       </select>
