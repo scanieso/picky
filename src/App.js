@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import Select from './Select';
 import './App.css';
 import PICKS from './utils/picks';
+import firebase from 'firebase';
+import ReactFireMixin from 'reactfire';
 
 const TYPE_OPTIONS = [
   'To Do',
@@ -10,11 +12,34 @@ const TYPE_OPTIONS = [
 ];
 
 class App extends Component {
+  mixins: [ReactFireMixin]
+
   constructor(props) {
     super(props);
     this.state = {
       selectedType: 'Random'
     };
+
+    const config = {
+      apiKey: 'AIzaSyBhcL-9fXFb53AnaClbUuZn0tl271ngsiY',
+
+      // Only needed if using Firebase Realtime Database (which we will be in this example)
+      databaseURL: 'https://picky-654c3.firebaseio.com',
+
+      // Only needed if using Firebase Authentication
+      authDomain: 'picky-654c3.firebaseapp.com',
+
+      // Only needed if using Firebase Storage
+      storageBucket: 'picky-654c3.appspot.com'
+    };
+
+    firebase.initializeApp(config);
+  }
+
+  componentWillMount() {
+    console.log('componentWillMount');
+    var ref = firebase.database().ref("items");
+    console.log(ref);
   }
 
   pick = (e) => {
